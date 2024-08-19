@@ -44,7 +44,7 @@ public class SteamService {
             model.setPositive(node.path("positive").asInt());
             model.setNegative(node.path("negative").asInt());
             model.setCcu(node.path("ccu").asInt());
-            model.setSteam_appid(node.path("steam_appid").asInt());
+
 
             // Récupérer les données supplémentaires depuis l'API Steam
             String urlSteam = "https://store.steampowered.com/api/appdetails?appids=" + appId;
@@ -60,7 +60,7 @@ public class SteamService {
                 model.setDiscount_percent(appDetailsNode.path("price_overview").path("discount_percent").asInt());
                 model.setInitial_formatted(appDetailsNode.path("price_overview").path("initial_formatted").asText());
                 model.setFinal_formatted(appDetailsNode.path("price_overview").path("final_formatted").asText());
-                model.setMp4(appDetailsNode.path("movies").path(0).path("mp4").asText());
+                model.setMp4(appDetailsNode.path("movies").path(0).path("mp4").path("max").asText());
                 model.setWindows(appDetailsNode.path("platforms").path("windows").asBoolean());
                 model.setMac(appDetailsNode.path("platforms").path("mac").asBoolean());
                 model.setLinux(appDetailsNode.path("platforms").path("linux").asBoolean());

@@ -11,7 +11,6 @@ public class MergedModel {
     private int positive;
     private int negative;
     private int ccu;
-    private int steam_appid;
     private String short_description;
     private boolean is_free;
     private String capsule_image;

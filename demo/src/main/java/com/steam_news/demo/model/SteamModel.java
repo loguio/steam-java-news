@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class SteamModel {
-    int steam_appid;
     String short_description;
     boolean is_free;
     String capsule_image;
