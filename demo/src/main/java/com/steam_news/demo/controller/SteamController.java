@@ -24,8 +24,7 @@ public class SteamController {
             String formattedJson = steamService.fetchPopularGames(request);
             return ResponseEntity.ok(formattedJson);
         } catch (Exception e) {
-            System.err.println("Erreur lors de l'appel à l'API Steam : " + e.getMessage());
-            return ResponseEntity.status(500).body("Erreur lors de la récupération des données de l'API Steam.");
+            return ResponseEntity.status(500).body("Erreur lors de la récupération des données.");
         }
     }
 
