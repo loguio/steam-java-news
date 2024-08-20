@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class MergedModel {
-    private int appid;
+    private String appid;
     private String name;
     private String developer;
     private String publisher;

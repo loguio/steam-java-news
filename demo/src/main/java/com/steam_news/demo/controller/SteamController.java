@@ -36,7 +36,7 @@ public class SteamController {
     public ResponseEntity<MergedModel> getDetailsGame(@RequestParam(required = true, defaultValue = "0") String id) {
         try {
             MergedModel model = new MergedModel();
-            MergedModel getDetails = steamService.GetDetailsGame(id, model);
+            MergedModel getDetails = steamService.GetDetailsGame(id, model,true);
             return ResponseEntity.ok(getDetails);
         } catch (Exception e) {
              System.err.println("Erreur lors de l'appel à l'API Steam : " + e.getMessage());

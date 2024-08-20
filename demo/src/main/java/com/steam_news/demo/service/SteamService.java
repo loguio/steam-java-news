@@ -47,7 +47,7 @@ public class SteamService {
 
             // Créer un modèle et le remplir avec les données de SteamSpy
             MergedModel model = new MergedModel();
-            model.setAppid(node.path("appid").asInt());
+            model.setAppid(node.path("appid").asText());
             model.setName(node.path("name").asText());
             model.setDeveloper(node.path("developer").asText());
             model.setPublisher(node.path("publisher").asText());
@@ -57,10 +57,9 @@ public class SteamService {
 
 
             // Récupérer les données supplémentaires depuis l'API Steam
-            String urlSteam = "https://store.steampowered.com/api/appdetails?appids=" + appId;
             if ( count >= page*countElementFor1Page && count < (page+1)*countElementFor1Page){
                 //fetch API
-                MergedModel newModel = GetDetailsGame(appId, model);
+                MergedModel newModel = GetDetailsGame(appId, model,false);
             }
             
             mergedModels.add(model);
@@ -71,7 +70,9 @@ public class SteamService {
         return mergedModels.subList(page*countElementFor1Page ,(page+1)*countElementFor1Page);
     }
 
-    public MergedModel GetDetailsGame(String id, MergedModel model) throws JsonMappingException, JsonProcessingException {
+    public MergedModel GetDetailsGame(String id, MergedModel model, boolean emptyModel) throws JsonMappingException, JsonProcessingException {
+        
+
         String url = "https://store.steampowered.com/api/appdetails?appids=" + id;
         // Fetch API
         String steamResponse = restTemplate.getForObject(url, String.class);
@@ -80,6 +81,21 @@ public class SteamService {
 
         // mapping api into model
         if (appDetailsNode.isObject() ) {
+            if (emptyModel){
+                //Fetch api SPy
+                String urlSpy = "https://steamspy.com/api.php?request=appdetails&appid=" + id;
+                String steamResponse2 = restTemplate.getForObject(urlSpy, String.class);
+                JsonNode appDetailsSpy = objectMapper.readTree(steamResponse2);
+
+                model.setAppid(id);
+                model.setName(appDetailsSpy.path("name").asText());
+                model.setDeveloper(appDetailsSpy.path("developer").asText());
+                model.setPublisher(appDetailsSpy.path("publisher").asText());
+                model.setPositive(appDetailsSpy.path("positive").asInt());
+                model.setNegative(appDetailsSpy.path("negative").asInt());
+                model.setCcu(appDetailsSpy.path("ccu").asInt());
+
+            }
             model.setShort_description(appDetailsNode.path("short_description").asText());
             model.set_free(appDetailsNode.path("is_free").asBoolean());
             model.setCapsule_image(appDetailsNode.path("header_image").asText());
