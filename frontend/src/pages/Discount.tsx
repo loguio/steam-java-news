@@ -1,3 +1,3 @@
 export const Discount = () => {
-  return <h1 style={{ color: "white" }}>Page discount</h1>;
+  return <h1>Page discount</h1>;
 };
