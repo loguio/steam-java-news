@@ -9,7 +9,7 @@ export const GameDetails = () => {
     retrieveGames();
   }, []);
   const retrieveGames = async () => {
-    const result = await getDetails(201810);
+    const result = await getDetails(1446780);
     if (result) setGames(result);
   };
 
@@ -90,19 +90,34 @@ export const GameDetails = () => {
               <div>Date de sortie: {games.release_date}</div>
               <br />
               <div>
-                website: <a href={games.website}>{games.website}</a>
+                website:{" "}
+                <a target="_blank" href={games.website}>
+                  {games.website}
+                </a>
+              </div>
+              <div>
+                Page steam:{" "}
+                <a
+                  target="_blank"
+                  href={"https://store.steampowered.com/app/" + games.appid}
+                >
+                  {games.name}
+                </a>
               </div>
               <br />
               <div>Window: {games.windows ? "oui" : "non"}</div>
               <div>Mac: {games.mac ? "oui" : "non"}</div>
               <div>Linux: {games.linux ? "oui" : "non"}</div>
               <br />
+              <div>Soldes: -{games.discount_percent}%</div>
+              <div>Prix initiales: {games.initial_formatted}</div>
               <div>
-                Prix:
+                Prix soldé:{" "}
                 {games.final_formatted != ""
                   ? games.final_formatted
                   : "Gratuit"}
               </div>
+              <br />
               <div>Joueur connecté hier: {games.ccu}</div>
               <div>
                 Avis positifs:{" "}
