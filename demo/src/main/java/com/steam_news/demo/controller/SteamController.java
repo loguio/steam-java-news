@@ -28,19 +28,19 @@ public class SteamController {
             List<MergedModel> formattedJson = steamService.fetchPopularGames(request,Integer.parseInt(page));
             return ResponseEntity.ok(formattedJson);
         } catch (Exception e) {
-            return (ResponseEntity<List<MergedModel>>) ResponseEntity.status(500);
+            return ResponseEntity.status(500).build();
         }
     }
 
     @GetMapping("details")
-    public ResponseEntity<String> getDetailsGame(int id) {
-        return null;
-        // try {
-        //     String getDetails = steamService.GetDetailsGame(id);
-        //     return getDetails;
-        // } catch (Exception e) {
-        //      System.err.println("Erreur lors de l'appel à l'API Steam : " + e.getMessage());
-        //     return ResponseEntity.status(500).body("Erreur lors de la récupération des données de l'API Steam.");
-        // }
+    public ResponseEntity<MergedModel> getDetailsGame(@RequestParam(required = true, defaultValue = "0") String id) {
+        try {
+            MergedModel model = new MergedModel();
+            MergedModel getDetails = steamService.GetDetailsGame(id, model);
+            return ResponseEntity.ok(getDetails);
+        } catch (Exception e) {
+             System.err.println("Erreur lors de l'appel à l'API Steam : " + e.getMessage());
+            return ResponseEntity.status(500).build();
+        }
     }
 }
