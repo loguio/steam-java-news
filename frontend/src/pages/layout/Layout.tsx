@@ -22,10 +22,10 @@ const Layout = (props: ReactNodeProps) => {
           alignContent: "center",
         }}
       >
-        <button onClick={() => null} className="button-9">
+        <button onClick={() => navigate("/")} className="button-9">
           Popular Game
         </button>
-        <button onClick={() => null} className="button-9">
+        <button onClick={() => navigate("/discount")} className="button-9">
           Discount Game
         </button>
       </div>
