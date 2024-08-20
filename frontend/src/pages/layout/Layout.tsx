@@ -9,13 +9,14 @@ const Layout = (props: ReactNodeProps) => {
     <>
       <div
         style={{
-          height: "120px",
+          height: "80px",
           width: "100%",
-          backgroundColor: "lightblue",
+          backgroundColor: "#1F2833",
           alignItems: "center",
           display: "flex",
           gap: "100px",
           paddingLeft: "20px",
+          alignContent: "center",
         }}
       >
         <button onClick={() => null} className="button-9">
