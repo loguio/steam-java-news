@@ -7,7 +7,7 @@ export type model = {
   negative: number;
   ccu: number;
   short_description: string;
-  is_free: boolean;
+  _free: boolean;
   capsule_image: string;
   website: string;
   discount_percent: number;
