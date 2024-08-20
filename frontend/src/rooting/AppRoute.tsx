@@ -1,13 +1,15 @@
 import { Route, Routes } from "react-router-dom";
-import Layout from "../pages/layout/layout";
 import NoMatch from "../pages/NoMatch";
-import { Home } from "../pages/home";
+import { Discount } from "../pages/Discount";
+import { Home } from "../pages/Home";
+import Layout from "../pages/layout/Layout";
 
 const AppRoot = () => {
   return (
     <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/discount" element={<Discount />} />
         <Route path="*" element={<NoMatch />} />
       </Routes>
     </Layout>

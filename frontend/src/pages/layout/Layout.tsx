@@ -1,10 +1,13 @@
 import "./LayoutStyle.css";
+import { useNavigate } from "react-router-dom";
 
 interface ReactNodeProps {
   children: React.ReactNode;
 }
 
 const Layout = (props: ReactNodeProps) => {
+  const navigate = useNavigate();
+
   return (
     <>
       <div
