@@ -1,11 +1,17 @@
 package com.steam_news.demo.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.steam_news.demo.model.MergedModel;
 import com.steam_news.demo.service.SteamService;
 
 
@@ -19,12 +25,12 @@ public class SteamController {
     }
 
     @GetMapping("top100")
-    public ResponseEntity<String> getPopularGames(@RequestParam(required = false, defaultValue = "top100in2weeks") String request) {
+    public ResponseEntity<List<MergedModel>> getPopularGames(@RequestParam(required = true, defaultValue = "0") String page, @RequestParam(required = false, defaultValue = "top100in2weeks") String request) {
         try {
-            String formattedJson = steamService.fetchPopularGames(request);
+            List<MergedModel> formattedJson = steamService.fetchPopularGames(request,Integer.parseInt(page));
             return ResponseEntity.ok(formattedJson);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Erreur lors de la récupération des données.");
+            return (ResponseEntity<List<MergedModel>>) ResponseEntity.status(500);
         }
     }
 

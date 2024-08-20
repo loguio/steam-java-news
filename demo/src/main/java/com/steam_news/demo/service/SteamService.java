@@ -1,7 +1,9 @@
 package com.steam_news.demo.service;
 
 import java.util.Iterator;
-import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -11,6 +13,8 @@ import com.steam_news.demo.model.MergedModel;
 
 @Service
 public class SteamService {
+    final int countElementFor1Page = 10;
+
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
@@ -20,16 +24,16 @@ public class SteamService {
     }
 
     // FetchPopularGames
-    public String fetchPopularGames(String request) throws Exception {
+    public List<MergedModel> fetchPopularGames(String request,int page) throws Exception {
         String urlSteamspy = "https://steamspy.com/api.php?request=" + request;
         
         // Récupérer les données de SteamSpy
         String responseBody = restTemplate.getForObject(urlSteamspy, String.class);
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-        Map<String, MergedModel> mergedModels = new HashMap<>();
+        ArrayList<MergedModel> mergedModels = new ArrayList<MergedModel>();
         Iterator<Map.Entry<String, JsonNode>> fields = jsonNode.fields();
-
+        int count=0;
         while (fields.hasNext()) {
             Map.Entry<String, JsonNode> field = fields.next();
             String appId = field.getKey();
@@ -48,29 +52,34 @@ public class SteamService {
 
             // Récupérer les données supplémentaires depuis l'API Steam
             String urlSteam = "https://store.steampowered.com/api/appdetails?appids=" + appId;
-            String steamResponse = restTemplate.getForObject(urlSteam, String.class);
-            JsonNode steamJsonNode = objectMapper.readTree(steamResponse);
-
-            JsonNode appDetailsNode = steamJsonNode.path(appId).path("data");
-            if (appDetailsNode.isObject()) {
-                model.setShort_description(appDetailsNode.path("short_description").asText());
-                model.set_free(appDetailsNode.path("is_free").asBoolean());
-                model.setCapsule_image(appDetailsNode.path("header_image").asText());
-                model.setWebsite(appDetailsNode.path("website").asText());
-                model.setDiscount_percent(appDetailsNode.path("price_overview").path("discount_percent").asInt());
-                model.setInitial_formatted(appDetailsNode.path("price_overview").path("initial_formatted").asText());
-                model.setFinal_formatted(appDetailsNode.path("price_overview").path("final_formatted").asText());
-                model.setMp4(appDetailsNode.path("movies").path(0).path("mp4").path("max").asText());
-                model.setWindows(appDetailsNode.path("platforms").path("windows").asBoolean());
-                model.setMac(appDetailsNode.path("platforms").path("mac").asBoolean());
-                model.setLinux(appDetailsNode.path("platforms").path("linux").asBoolean());
-                model.setRelease_date(appDetailsNode.path("release_date").path("date").asText());
+            if ( count >= page*countElementFor1Page && count < (page+1)*countElementFor1Page){
+                String steamResponse = restTemplate.getForObject(urlSteam, String.class);
+                JsonNode steamJsonNode = objectMapper.readTree(steamResponse);
+                System.out.println(node.path("name").asText());
+                JsonNode appDetailsNode = steamJsonNode.path(appId).path("data");
+                if (appDetailsNode.isObject() ) {
+                    model.setShort_description(appDetailsNode.path("short_description").asText());
+                    model.set_free(appDetailsNode.path("is_free").asBoolean());
+                    model.setCapsule_image(appDetailsNode.path("header_image").asText());
+                    model.setWebsite(appDetailsNode.path("website").asText());
+                    model.setDiscount_percent(appDetailsNode.path("price_overview").path("discount_percent").asInt());
+                    model.setInitial_formatted(appDetailsNode.path("price_overview").path("initial_formatted").asText());
+                    model.setFinal_formatted(appDetailsNode.path("price_overview").path("final_formatted").asText());
+                    model.setMp4(appDetailsNode.path("movies").path(0).path("mp4").path("max").asText());
+                    model.setWindows(appDetailsNode.path("platforms").path("windows").asBoolean());
+                    model.setMac(appDetailsNode.path("platforms").path("mac").asBoolean());
+                    model.setLinux(appDetailsNode.path("platforms").path("linux").asBoolean());
+                    model.setRelease_date(appDetailsNode.path("release_date").path("date").asText());
+                }
             }
+            
 
-            mergedModels.put(appId, model);
+            mergedModels.add(model);
+            count+=1;
         }
+    
 
-        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(mergedModels);
+        return mergedModels.subList(page*countElementFor1Page ,(page+1)*countElementFor1Page);
     }
 
     public String GetDetailsGame(int id) {
