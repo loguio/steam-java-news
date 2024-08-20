@@ -32,6 +32,16 @@ public class SteamController {
         }
     }
 
+    @GetMapping("discount")
+    public ResponseEntity<List<MergedModel>> getDiscount(@RequestParam(required = true, defaultValue = "0") String page, @RequestParam(required = false, defaultValue = "top100in2weeks") String request) {
+        try {
+            List<MergedModel> formattedJson = steamService.fetchDiscount(request,Integer.parseInt(page));
+            return ResponseEntity.ok(formattedJson);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
+    }
+
     @GetMapping("details")
     public ResponseEntity<MergedModel> getDetailsGame(@RequestParam(required = true, defaultValue = "0") String id) {
         try {

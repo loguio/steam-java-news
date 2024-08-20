@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { getDetails } from "../api/api";
 import { model } from "../model/model";
+import { useParams } from "react-router-dom";
 
 export const GameDetails = () => {
   const [games, setGames] = useState<model>();
-
+  const { id } = useParams();
   useEffect(() => {
     retrieveGames();
   }, []);
   const retrieveGames = async () => {
-    const result = await getDetails(1446780);
+    const result = await getDetails(parseInt(id as string));
     if (result) setGames(result);
   };
 
