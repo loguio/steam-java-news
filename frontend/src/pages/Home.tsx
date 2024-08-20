@@ -14,7 +14,7 @@ export const Home = () => {
   };
   return (
     <>
-      <h1>HOMEEE</h1>
+      <h1 style={{ color: "white" }}>HOMEEE</h1>
     </>
   );
 };
