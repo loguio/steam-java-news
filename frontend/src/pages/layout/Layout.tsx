@@ -1,3 +1,5 @@
+import "./LayoutStyle.css";
+
 interface ReactNodeProps {
   children: React.ReactNode;
 }
@@ -12,36 +14,16 @@ const Layout = (props: ReactNodeProps) => {
           backgroundColor: "lightblue",
           alignItems: "center",
           display: "flex",
+          gap: "100px",
+          paddingLeft: "20px",
         }}
       >
-        <div
-          onClick={() => null}
-          style={{
-            height: "50px",
-            width: "150px",
-            backgroundColor: "lightpink",
-            justifyContent: "center",
-            alignItems: "center",
-            display: "flex",
-            marginLeft: "150px",
-          }}
-        >
+        <button onClick={() => null} className="button-9">
           Popular Game
-        </div>
-        <div
-          onClick={() => null}
-          style={{
-            height: "50px",
-            width: "150px",
-            backgroundColor: "lightpink",
-            justifyContent: "center",
-            alignItems: "center",
-            display: "flex",
-            marginLeft: "150px",
-          }}
-        >
+        </button>
+        <button onClick={() => null} className="button-9">
           Discount Game
-        </div>
+        </button>
       </div>
       {props.children}
     </>
