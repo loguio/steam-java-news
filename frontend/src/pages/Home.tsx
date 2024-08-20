@@ -12,9 +12,10 @@ export const Home = () => {
     const result = await getGames();
     if (result) setGames(result);
   };
+
   return (
     <>
-      <h1 style={{ color: "white" }}>HOMEEE</h1>
+      <h1>HOMEEE</h1>
     </>
   );
 };
