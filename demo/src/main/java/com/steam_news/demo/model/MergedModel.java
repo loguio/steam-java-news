@@ -1,9 +1,14 @@
 package com.steam_news.demo.model;
 
+import java.io.Serializable;
+
+import org.springframework.data.redis.core.RedisHash;
+
 import lombok.Data;
 
 @Data
-public class MergedModel {
+@RedisHash("MergedModel")
+public class MergedModel  implements Serializable{
     private String appid;
     private String name;
     private String developer;

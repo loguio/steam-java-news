@@ -4,6 +4,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,6 +24,13 @@ public class SteamService {
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
+
+    public static final String HASH_KEY = "MergedModel";
+
+    @Autowired
+    @Qualifier("redisTemplate")
+    private RedisTemplate template;
+
 
     public SteamService(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
@@ -71,8 +83,25 @@ public class SteamService {
     }
 
     public MergedModel GetDetailsGame(String id, MergedModel model, boolean emptyModel) throws JsonMappingException, JsonProcessingException {
+        // try{
+        //     System.out.println(template.keys("*"));
+        // }catch(Exception e){
+        //     System.err.println(e);
+        // }
         
+        // Vérifier d'abord si le jeu est dans le cache
+        try{
+            MergedModel cachedModel = (MergedModel) template.opsForHash().get(HASH_KEY, id);
+            // Si le jeu est trouvé dans le cache, le renvoyer directement
+        if (cachedModel != null && emptyModel) {
+            return cachedModel;
+        }
 
+        }catch(Exception error){
+            System.err.println(error);
+        }
+
+        
         String url = "https://store.steampowered.com/api/appdetails?appids=" + id;
         // Fetch API
         String steamResponse = restTemplate.getForObject(url, String.class);
@@ -109,6 +138,13 @@ public class SteamService {
             model.setLinux(appDetailsNode.path("platforms").path("linux").asBoolean());
             model.setRelease_date(appDetailsNode.path("release_date").path("date").asText());
         }
+        try{
+
+            template.opsForHash().put(HASH_KEY,model.getAppid(),model);
+        }catch(Exception error){
+            System.err.println(error);
+        }
+
 
         return model;
     }

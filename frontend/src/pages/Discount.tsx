@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { model } from "../model/model";
-import { getGames } from "../api/api";
 import { CompactTable } from "@table-library/react-table-library/compact";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
@@ -21,8 +20,8 @@ export const Discount = () => {
 
   const retrieveDiscount = async () => {
     setGames([]);
-    const result = await getDiscount(page);
-    if (result) setGames(result);
+    // const result = await getDiscount(page);
+    // if (result) setGames(result);
   };
 
   const theme = useTheme([

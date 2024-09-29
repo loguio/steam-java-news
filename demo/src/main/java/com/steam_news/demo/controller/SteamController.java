@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import com.steam_news.demo.service.SteamService;
 
 @RestController
 @RequestMapping(value ="/steam_api")
+@CrossOrigin(origins = "http://localhost:3000")  // Remplacez par l'URL de votre front-end si nécessaire
 public class SteamController {
    private final SteamService steamService;
 
