@@ -67,33 +67,33 @@ public class SteamService {
             model.setNegative(node.path("negative").asInt());
             model.setCcu(node.path("ccu").asInt());
 
-
-            // Récupérer les données supplémentaires depuis l'API Steam
-            if ( count >= page*countElementFor1Page && count < (page+1)*countElementFor1Page){
-                //fetch API
-                MergedModel newModel = GetDetailsGame(appId, model,false);
+            try {
+                MergedModel newModel = null;
+                // Récupérer les données supplémentaires depuis l'API Steam
+                if ( count >= page*countElementFor1Page && count < (page+1)*countElementFor1Page){
+                    //fetch API
+                    newModel = GetDetailsGame(appId, model,false);
+                }
+                if (newModel!=null){
+                    mergedModels.add(newModel);
+                }
+            }catch(Exception e){
+                System.err.println(e);
             }
             
-            mergedModels.add(model);
             count+=1;
         }
-    
         // return subList
-        return mergedModels.subList(page*countElementFor1Page ,(page+1)*countElementFor1Page);
+        return mergedModels;
     }
 
-    public MergedModel GetDetailsGame(String id, MergedModel model, boolean emptyModel) throws JsonMappingException, JsonProcessingException {
-        // try{
-        //     System.out.println(template.keys("*"));
-        // }catch(Exception e){
-        //     System.err.println(e);
-        // }
-        
+    public MergedModel GetDetailsGame(String id, MergedModel model, boolean emptyModel) throws JsonMappingException, JsonProcessingException {        
         // Vérifier d'abord si le jeu est dans le cache
         try{
             MergedModel cachedModel = (MergedModel) template.opsForHash().get(HASH_KEY, id);
             // Si le jeu est trouvé dans le cache, le renvoyer directement
-        if (cachedModel != null && emptyModel) {
+            // System.out.println(cachedModel+"\n###############################################################");
+        if (cachedModel != null) {
             return cachedModel;
         }
 

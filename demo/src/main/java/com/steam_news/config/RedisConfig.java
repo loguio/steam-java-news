@@ -1,5 +1,6 @@
 package com.steam_news.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
@@ -21,12 +22,17 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
+    @Value("${REDIS_HOST:localhost}") // Valeur par défaut si la variable n'est pas définie
+    private String redisHost;
 
+    @Value("${REDIS_PORT:6379}") // Valeur par défaut si la variable n'est pas définie
+    private int redisPort;
+    
     @Bean
     public JedisConnectionFactory connectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        configuration.setHostName("localhost");
-        configuration.setPort(6379);
+        configuration.setHostName(redisHost);
+        configuration.setPort(redisPort);
         return new JedisConnectionFactory(configuration);
     }
 

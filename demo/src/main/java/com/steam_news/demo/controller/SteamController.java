@@ -16,7 +16,7 @@ import com.steam_news.demo.service.SteamService;
 
 @RestController
 @RequestMapping(value ="/steam_api")
-@CrossOrigin(origins = "http://localhost:3000")  // Remplacez par l'URL de votre front-end si nécessaire
+@CrossOrigin(origins = "http://frontend:80")  // Remplacez par l'URL de votre front-end si nécessaire
 public class SteamController {
    private final SteamService steamService;
 
@@ -30,6 +30,7 @@ public class SteamController {
             List<MergedModel> formattedJson = steamService.fetchPopularGames(request,Integer.parseInt(page));
             return ResponseEntity.ok(formattedJson);
         } catch (Exception e) {
+            System.err.println(e);
             return ResponseEntity.status(500).build();
         }
     }
